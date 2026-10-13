@@ -5,6 +5,7 @@
 
 // Canvas
 
+
 typedef struct {
     Color color;
     float reacitivity;
@@ -12,6 +13,15 @@ typedef struct {
     float boiling_point;
     float viscosity;
 } Compound;
+
+typedef struct {
+    Compound compound;
+    float amount;
+} Sample;
+
+typedef struct {
+    Sample compounds[50];
+} Substance;
 
 typedef struct {
     bool filled;
@@ -122,7 +132,7 @@ int main(void) {
         for(int r = rows; r >= 0; r--){
             for(int c = cols; c >=0; c--){
                 if(matrix[r][c] == 1){
-
+                    
                     // Move tile if able
                     if (r+1 < rows && matrix[r+1][c] == 0){
                         matrix[r][c] = 0;
