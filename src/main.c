@@ -2,14 +2,54 @@
 #include "stdio.h"
 #include "string.h"
 
+// Canvas
+
+typedef struct {
+    Color color;
+    float reacitivity;
+    float melting_point;
+    float boiling_point;
+    float viscosity;
+} Compound;
+
+typedef struct {
+    bool filled;
+    float heat;
+    Compound* compound;
+} Molecule;
+
+typedef struct {
+    Molecule 
+    Image buffer;
+    Texture display;
+    int rows;
+    int cols;
+} Canvas;
+
+// Particulate
+typedef struct {
+    int window_width;
+    int window_height;
+    Canvas canvas;
+
+} Particulate;
+
+void InitializeParticulate(){
+    Particulate p;
+    p.window_width = 1280;
+    p.window_height = 720;
+
+}
+
+
+
 int main(void) {
 
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
+    const int window_width = 1280;
+    const int window_height = 720;
 
-    const int gridSize = 20;
-    const int rows = screenHeight / gridSize;
-    const int cols = screenWidth / gridSize;
+    const int rows = window_width / gridSize;
+    const int cols = window_height / gridSize;
 
     int matrix[rows][cols];
     memset(matrix, 0, sizeof(matrix)); // initialize all values to 0
