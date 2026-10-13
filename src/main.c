@@ -1,6 +1,7 @@
-#include "raylib.h"
-#include "stdio.h"
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <raylib.h>
 
 // Canvas
 
@@ -19,11 +20,11 @@ typedef struct {
 } Molecule;
 
 typedef struct {
-    Molecule 
     Image buffer;
     Texture display;
     int rows;
     int cols;
+    Molecule** matrix;
 } Canvas;
 
 // Particulate
@@ -34,10 +35,28 @@ typedef struct {
 
 } Particulate;
 
+Canvas InitializeCanvas(int rows, int cols) {
+    Canvas c;
+    c.rows = rows;
+    c.cols = cols;
+    c.buffer = GenImageColor(cols, rows, BLANK);
+    c.display = LoadTextureFromImage(c.buffer);
+    c.matrix = malloc(c.rows * sizeof(Molecule*));
+    for(int i = 0; i < c.rows; i++) {
+        c.matrix[i] = malloc(c.cols * sizeof(Molecule));
+    }
+    return c;
+}
+
 void InitializeParticulate(){
     Particulate p;
     p.window_width = 1280;
     p.window_height = 720;
+
+    int initial_width = 640;
+    int initial_height = 480;
+
+    p.canvas = InitializeCanvas(initial_height, initial_width);
 
 }
 
@@ -45,6 +64,7 @@ void InitializeParticulate(){
 
 int main(void) {
 
+/*
     const int window_width = 1280;
     const int window_height = 720;
 
@@ -54,15 +74,17 @@ int main(void) {
     int matrix[rows][cols];
     memset(matrix, 0, sizeof(matrix)); // initialize all values to 0
 
+*/
     Color bgColor = BLACK;
 
-    InitWindow(screenWidth, screenHeight, "Basic Sand Sim Demo");
+    InitWindow(500, 500, "Basic Sand Sim Demo");
     SetTargetFPS(60);
 
     while (!WindowShouldClose())    
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
             
+            /*
             Vector2 mpos = GetMousePosition();
             int x = mpos.x / gridSize;
             int y = mpos.y / gridSize;
@@ -70,11 +92,12 @@ int main(void) {
             if (matrix[y][x] == 0){
                 matrix[y][x] = 1;
             }
+            */
         }
 
         BeginDrawing();
         ClearBackground(bgColor);
-
+/*
         // iterate bottom to top through the matrix. Top to bottom would cause everything to happen instantly
         for(int r = rows; r >= 0; r--){
             for(int c = cols; c >=0; c--){
@@ -100,6 +123,7 @@ int main(void) {
                 }
             }
         }
+        */
 
         EndDrawing();
     }
