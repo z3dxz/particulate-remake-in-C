@@ -35,34 +35,55 @@ typedef struct {
 
 } Particulate;
 
-Canvas InitializeCanvas(int rows, int cols) {
-    Canvas c;
-    c.rows = rows;
-    c.cols = cols;
-    c.buffer = GenImageColor(cols, rows, BLANK);
-    c.display = LoadTextureFromImage(c.buffer);
-    c.matrix = malloc(c.rows * sizeof(Molecule*));
-    for(int i = 0; i < c.rows; i++) {
-        c.matrix[i] = malloc(c.cols * sizeof(Molecule));
+void InitializeCanvas(Canvas* c, int rows, int cols) {
+    c->rows = rows;
+    c->cols = cols;
+    c->buffer = GenImageColor(cols, rows, BLANK);
+    c->display = LoadTextureFromImage(c->buffer);
+    c->matrix = malloc(c->rows * sizeof(Molecule*));
+    for(int i = 0; i < c->rows; i++) {
+        c->matrix[i] = malloc(c->cols * sizeof(Molecule));
     }
-    return c;
 }
 
-void InitializeParticulate(){
-    Particulate p;
-    p.window_width = 1280;
-    p.window_height = 720;
+void UninitializeCanvas(Canvas* canvas) {
+    if(canvas == NULL) return;
+
+    if(canvas->matrix) {
+        for(int i=0; i<canvas->rows; i++) {
+            free(canvas->matrix[i]);
+        }
+        free(canvas->matrix);
+    }
+}
+
+void InitializeParticulate(Particulate* p){
+    p->window_width = 1280;
+    p->window_height = 720;
 
     int initial_width = 640;
     int initial_height = 480;
 
-    p.canvas = InitializeCanvas(initial_height, initial_width);
+    InitializeCanvas(&p->canvas, initial_height, initial_width);
 
+    InitWindow(500, 500, "Basic Sand Sim Demo");
+
+}
+
+void CloseParticulate(Particulate* p) {
+
+    UninitializeCanvas(&p->canvas);
+
+    CloseWindow();
 }
 
 
 
 int main(void) {
+
+    Particulate particulate;
+    InitializeParticulate(&particulate);
+
 
 /*
     const int window_width = 1280;
@@ -77,7 +98,6 @@ int main(void) {
 */
     Color bgColor = BLACK;
 
-    InitWindow(500, 500, "Basic Sand Sim Demo");
     SetTargetFPS(60);
 
     while (!WindowShouldClose())    
@@ -128,6 +148,6 @@ int main(void) {
         EndDrawing();
     }
 
-    CloseWindow();
+    CloseParticulate(&particulate);
     return 0;
 }
